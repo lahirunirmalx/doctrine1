@@ -750,7 +750,7 @@ class Doctrine_Query extends Doctrine_Query_Abstract implements Countable
 
                                 // check column existence
                                 if ( ! $def) {
-                                    throw new Doctrine_Query_Exception('Unknown column ' . $field);
+                                    throw new Doctrine_Query_Exception('Unknown column ' . $field . ' in table:' . $table->getOption('tableName'));
                                 }
 
                                 if (isset($def['owner'])) {

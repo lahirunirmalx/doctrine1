@@ -745,6 +745,7 @@ class Doctrine_Manager extends Doctrine_Configurable implements Countable, Itera
                 'unsigned',
                 'errorstack',
                 'nospace',
+                'bulkdataupload',
                 'creditcard',
                 'regexp',
                 'exception',
