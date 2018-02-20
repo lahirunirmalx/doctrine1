@@ -762,6 +762,7 @@ class Doctrine_Manager extends Doctrine_Configurable implements Countable, Itera
                 'usstate',
                 'email',
                 'country',
+		'sensitivity'
             ));
         }
 
