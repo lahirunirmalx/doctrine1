@@ -213,7 +213,12 @@ class Doctrine_Search extends Doctrine_Record_Generator
 
     /**
      * batchUpdateIndex 
+     *
+     * Suppress too few parameter warning since phan incorrectly determines the type of
+     * new $class() as Doctrine_Connection.
      * 
+     * @suppress PhanParamTooFew
+     *
      * @param mixed $limit 
      * @param mixed $offset 
      * @return void
