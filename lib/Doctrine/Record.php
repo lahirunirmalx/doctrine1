@@ -2186,6 +2186,10 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     /**
      * generates a copy of this object. Returns an instance of the same class of $this.
      *
+     * Suppress Expression may not be PHP 7 compatible warning since this was verified as working correctly.
+     *
+     * @suppress PhanCompatiblePHP7    
+     *
      * @param boolean $deep     whether to duplicates the objects targeted by the relations
      * @return Doctrine_Record
      */
