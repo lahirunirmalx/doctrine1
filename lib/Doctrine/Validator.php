@@ -97,16 +97,21 @@ class Doctrine_Validator extends Doctrine_Locator_Injectable
         } else if ($type == 'array' || $type == 'object') {
             $length = strlen(serialize($value));
         } else if ($type == 'decimal' || $type == 'float') {
+	        $originalValue = $value;
             $value = abs($value);
 
             $localeInfo = localeconv();
             $decimalPoint = $localeInfo['mon_decimal_point'] ? $localeInfo['mon_decimal_point'] : $localeInfo['decimal_point'];
             $e = explode($decimalPoint, $value);
-
+	        $originalValueNumberParts = explode($decimalPoint, $originalValue);
             $length = strlen($e[0]);
 
             if (isset($e[1])) {
-                $length += strlen($e[1]);
+	            if (strlen($originalValueNumberParts[1]) < strlen($e[1])) {
+		            $length = $length + strlen($originalValueNumberParts[1]);
+	            } else {
+		            $length = $length + strlen($e[1]);
+	            }
             }
         } else if ($type === 'blob') {
             $length = strlen($value);
