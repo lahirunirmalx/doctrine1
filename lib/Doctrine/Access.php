@@ -89,29 +89,25 @@ abstract class Doctrine_Access extends Doctrine_Locator_Injectable implements Ar
      * @param   string $name
      * @return  void
      */
+    #[\ReturnTypeWillChange]
     public function __unset($name)
     {
         return $this->remove($name);
     }
 
     /**
-     * Check if an offset axists
-     *
-     * @param   mixed $offset
-     * @return  boolean Whether or not this object contains $offset
+     * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return $this->contains($offset);
     }
 
     /**
-     * An alias of get()
-     *
-     * @see     get, __get
-     * @param   mixed $offset
      * @return  mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         // array notation with no index was causing 'undefined variable: $offset' notices in php7,
@@ -124,13 +120,9 @@ abstract class Doctrine_Access extends Doctrine_Locator_Injectable implements Ar
     }
 
     /**
-     * Sets $offset to $value
-     *
-     * @see     set, __set
-     * @param   mixed $offset
-     * @param   mixed $value
      * @return  void
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if ( ! isset($offset)) {
@@ -141,21 +133,19 @@ abstract class Doctrine_Access extends Doctrine_Locator_Injectable implements Ar
     }
 
     /**
-     * Unset a given offset
-     *
-     * @see   set, offsetSet, __set
-     * @param mixed $offset
+     * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
-        return $this->remove($offset);
+        $this->remove($offset);
     }
 
     /**
      * Remove the element with the specified offset
      *
      * @param mixed $offset The offset to remove
-     * @return boolean True if removed otherwise false
+     * @return bool True if removed otherwise false
      */
     public function remove($offset)
     {
@@ -186,8 +176,8 @@ abstract class Doctrine_Access extends Doctrine_Locator_Injectable implements Ar
     }
 
     /**
-     * Check if the specified offset exists 
-     * 
+     * Check if the specified offset exists
+     *
      * @param mixed $offset The offset to check
      * @return boolean True if exists otherwise false
      */
@@ -197,9 +187,9 @@ abstract class Doctrine_Access extends Doctrine_Locator_Injectable implements Ar
     }
 
     /**
-     * Add the value  
-     * 
-     * @param mixed $value The value to add 
+     * Add the value
+     *
+     * @param mixed $value The value to add
      * @return void
      */
     public function add($value)

@@ -2,14 +2,20 @@
 class UnitTestCase
 {
     protected $_passed = 0;
-    
     protected $_failed = 0;
-    
     protected $_messages = array();
 
     protected static $_passesAndFails = array('passes' => array(), 'fails' => array());
 
     protected static $_lastRunsPassesAndFails = array('passes' => array(), 'fails' => array());
+
+    public function setUp()
+    {
+    }
+
+    public function tearDown()
+    {
+    }
 
     public function init()
     {
@@ -107,7 +113,7 @@ class UnitTestCase
         }
     }
 
-    public function pass() 
+    public function pass()
     {
         $class = get_class($this);
         if ( ! isset(self::$_passesAndFails['fails'][$class])) {
@@ -118,7 +124,7 @@ class UnitTestCase
 
     public function fail($message = "")
     {
-        $this->_fail($message);    
+        $this->_fail($message);
     }
 
     public function _fail($message = "")
@@ -149,20 +155,16 @@ class UnitTestCase
         self::$_passesAndFails['fails'][$class] = $class;
     }
 
-    public function run(DoctrineTest_Reporter $reporter = null, $filter = null) 
+    public function run(DoctrineTest_Reporter $reporter = null, $filter = null)
     {
         foreach (get_class_methods($this) as $method) {
-            if (substr($method, 0, 4) === 'test') {
-                $this->setUp();
-
-                $this->$method();
-                
-                $this->tearDown();
+            if ($this->isTestMethod($method)) {
+                $this->runTest($method);
             }
         }
     }
 
-    public function getMessages() 
+    public function getMessages()
     {
         return $this->_messages;
     }
@@ -179,7 +181,7 @@ class UnitTestCase
 
     public function getPassesAndFailsCachePath()
     {
-        $dir = dirname(__FILE__) . '/doctrine_tests';
+        $dir = __DIR__ . '/doctrine_tests';
         if ( ! is_dir($dir)) {
             mkdir($dir, 0777, true);
         }
@@ -248,5 +250,50 @@ class UnitTestCase
     public function getNumFixedFails()
     {
         return count($this->getFixedFails());
+    }
+
+    private function runTest($method)
+    {
+        $this->setUp();
+
+        $this->doRunTestAndTearDown($method);
+    }
+
+    private function doRunTestAndTearDown($method)
+    {
+        $test = $this;
+
+        $this->tryFinally(
+            function () use ($test, $method) {
+                $test->$method();
+            },
+            function () use ($test) {
+                $test->tearDown();
+            }
+        );
+    }
+
+    private function isTestMethod($method)
+    {
+        return 'test' === substr($method, 0, 4);
+    }
+
+    private function tryFinally(Closure $try, Closure $finally)
+    {
+        $thrownException = null;
+
+        try {
+            $try();
+        } catch (Throwable $e) {
+            $thrownException = $e;
+        } catch (Exception $e) { // for PHP v5.x
+            $thrownException = $e;
+        }
+
+        $finally();
+
+        if (null !== $thrownException) {
+            throw $thrownException;
+        }
     }
 }

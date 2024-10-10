@@ -30,7 +30,7 @@
  * @since       1.0
  * @version     $Revision$
  */
-class Doctrine_Cli_TestCase extends Doctrine_UnitTestCase 
+class Doctrine_Cli_TestCase extends UnitTestCase
 {
     /**
      * @ignore
@@ -57,15 +57,11 @@ class Doctrine_Cli_TestCase extends Doctrine_UnitTestCase
     protected function getFixturesPath()
     {
         if (! isset($this->fixturesPath)) {
-            $this->fixturesPath = dirname(__FILE__) . '/CliTestCase';
+            $this->fixturesPath = __DIR__ . '/CliTestCase';
         }
 
         return $this->fixturesPath;
     }
-
-    public function setUp() {}
-
-    public function tearDown() {}
 
     public function testTheNameOfTheTaskBaseClassNameIsStoredInAClassConstant()
     {

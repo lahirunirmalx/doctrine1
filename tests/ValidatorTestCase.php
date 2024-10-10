@@ -80,6 +80,13 @@ class Doctrine_Validator_TestCase extends Doctrine_UnitTestCase
         $this->assertFalse(Doctrine_Validator::isValidType($var, 'array'));
         $this->assertFalse(Doctrine_Validator::isValidType($var, 'object'));
 
+        $var = '123.00';
+        $this->assertTrue(Doctrine_Validator::isValidType($var, 'string'));
+        $this->assertFalse(Doctrine_Validator::isValidType($var, 'integer'));
+        $this->assertTrue(Doctrine_Validator::isValidType($var, 'float'));
+        $this->assertFalse(Doctrine_Validator::isValidType($var, 'array'));
+        $this->assertFalse(Doctrine_Validator::isValidType($var, 'object'));
+
         $var = '';
         $this->assertTrue(Doctrine_Validator::isValidType($var, 'string'));
         $this->assertFalse(Doctrine_Validator::isValidType($var, 'integer'));
@@ -116,7 +123,19 @@ class Doctrine_Validator_TestCase extends Doctrine_UnitTestCase
         $this->assertTrue(Doctrine_Validator::isValidType($var, 'object'));
     }
 
-    public function testValidate2() 
+    public function testIsValidLength()
+    {
+        // Test length is less than maximum length
+        $this->assertTrue(Doctrine_Validator::validateLength(1.2345, "decimal", 5));
+
+        // Test null value is less than maximum length
+        $this->assertTrue(Doctrine_Validator::validateLength(null, "decimal", 4));
+
+        // Test length is greater than maximum length
+        $this->assertFalse(Doctrine_Validator::validateLength(1.2345, "decimal", 4));
+    }
+
+    public function testValidate2()
     {
         $test = new ValidatorTest();
         $test->mymixed = "message";

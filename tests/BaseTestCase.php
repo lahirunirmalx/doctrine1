@@ -30,7 +30,7 @@
  * @since       1.0
  * @version     $Revision$
  */
-class Doctrine_Base_TestCase extends Doctrine_UnitTestCase 
+class Doctrine_Base_TestCase extends Doctrine_UnitTestCase
 {
     public function testAggressiveModelLoading()
     {
@@ -45,7 +45,7 @@ class Doctrine_Base_TestCase extends Doctrine_UnitTestCase
 
         // Make sure it does not include the base classes
         $this->assertTrue( ! isset($models['BaseAggressiveModelLoadingUser']));
-        
+
         $filteredModels = Doctrine_Core::filterInvalidModels($models);
 
         // Make sure filterInvalidModels filters out base abstract classes
@@ -85,28 +85,29 @@ class Doctrine_Base_TestCase extends Doctrine_UnitTestCase
         $this->assertTrue(in_array('AggressiveModelLoadingUser', $models));
         $this->assertTrue(in_array('ConservativeModelLoadingProfile', $models));
         $this->assertTrue(in_array('ConservativeModelLoadingContact', $models));
-        
+
         $modelFiles = Doctrine_Core::getLoadedModelFiles();
         $this->assertTrue(file_exists($modelFiles['ConservativeModelLoadingUser']));
         $this->assertTrue(file_exists($modelFiles['ConservativeModelLoadingProfile']));
         $this->assertTrue(file_exists($modelFiles['ConservativeModelLoadingContact']));
     }
 
-    public function testGetConnectionByTableName()
+    public function testGetConnectionByTableNameForTableWithOneModel()
     {
-        $connectionBefore = Doctrine_Core::getConnectionByTableName('entity');
+        $connectionBefore = Doctrine_Core::getConnectionByTableName('account');
 
-        Doctrine_Manager::connection('sqlite::memory:', 'test_memory');
-        Doctrine_Manager::getInstance()->bindComponent('Entity', 'test_memory');
+        $this->openAdditionalConnection('sqlite::memory:', 'test_memory');
 
-        $connectionAfter = Doctrine_Core::getConnectionByTableName('entity');
+        Doctrine_Manager::getInstance()->bindComponent('Account', 'test_memory');
+
+        $connectionAfter = Doctrine_Core::getConnectionByTableName('account');
 
         $this->assertEqual($connectionAfter->getName(), 'test_memory');
 
-        Doctrine_Manager::getInstance()->bindComponent('Entity', $connectionBefore->getName());
+        Doctrine_Manager::getInstance()->bindComponent('Account', $connectionBefore->getName());
 
-        $connectionAfter = Doctrine_Core::getConnectionByTableName('entity');
-        
+        $connectionAfter = Doctrine_Core::getConnectionByTableName('account');
+
         $this->assertEqual($connectionBefore->getName(), $connectionAfter->getName());
     }
 }
